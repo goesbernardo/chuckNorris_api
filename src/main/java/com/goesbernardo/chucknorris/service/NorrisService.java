@@ -5,6 +5,7 @@ import com.goesbernardo.chucknorris.mapper.NorrisMapper;
 import com.goesbernardo.chucknorris.model.Norris;
 import com.goesbernardo.chucknorris.repository.NorrisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,8 @@ public class NorrisService {
 
     private final static NorrisMapper norrisMapper = NorrisMapper.INSTANCE;
 
-    private final static String baseUrl = "https://api.chucknorris.io/jokes/random";
+    @Value("${url}")
+    private String url;
 
     public NorrisDto findNorris(NorrisDto norrisDto) throws URISyntaxException {
 
@@ -31,7 +33,7 @@ public class NorrisService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<String>(headers);
         URI uri;
-        uri = new URI(baseUrl);
+        uri = new URI(url);
         ResponseEntity<NorrisDto> response = restTemplate.exchange(uri, HttpMethod.GET,entity,NorrisDto.class);
 
         norrisDto = response.getBody();
