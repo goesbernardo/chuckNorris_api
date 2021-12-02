@@ -34,7 +34,12 @@ public class NorrisService {
         uri = new URI(baseUrl);
         ResponseEntity<NorrisDto> response = restTemplate.exchange(uri, HttpMethod.GET,entity,NorrisDto.class);
 
-        return response.getBody();
+        norrisDto = response.getBody();
+
+        Norris norrisCreated = norrisMapper.toModel(norrisDto);
+        Norris createdNorris = norrisRepository.save(norrisCreated);
+
+        return norrisDto;
 
 
 
